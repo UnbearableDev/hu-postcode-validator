@@ -1,0 +1,9 @@
+# Apify SDK + MCP framework — runtime deps only.
+# Note: openpyxl is used only by scripts/build_db.py at dev time, NOT in production.
+# It gets installed into the Pi-side .venv when you run the build script,
+# but is excluded from the Docker image via .dockerignore and not listed here.
+
+apify >= 3.0.0, < 4.0.0
+apify-client
+fastmcp >= 3.0.0, < 4.0.0
+mcp >= 1.25.0, < 2.0.0

@@ -1,0 +1,12 @@
+{
+    "lookup-call": {
+        "eventTitle": "HU postcode lookup",
+        "eventDescription": "Charged once per call to lookup_postcode, lookup_city, validate_address, or budapest_district_lookup. Single-row or small-result queries.",
+        "eventPriceUsd": 0.001
+    },
+    "bulk-call": {
+        "eventTitle": "HU postcode bulk listing",
+        "eventDescription": "Charged once per call to list_postcodes_in_county. Returns up to several hundred rows per county.",
+        "eventPriceUsd": 0.005
+    }
+}
