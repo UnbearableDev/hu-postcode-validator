@@ -136,10 +136,52 @@ def load_bp_districts(path: Path) -> dict[int, str]:
     return out
 
 
+# Cities that have internal sub-postcodes encoded ONLY in their street sheets
+# (the Települések sheet only lists the city's main postcode for these).
+# Without this, lookup_postcode(6720..6728) returns not-found for Szeged etc.
+_CITY_STREET_SHEETS = {
+    "Szeged": "Szeged u.",
+    "Miskolc": "Miskolc u.",
+    "Debrecen": "Debrecen u.",
+    "Pécs": "Pécs u.",
+    "Győr": "Győr u.",
+}
+
+
+def load_city_subpostcodes(path: Path) -> dict[str, set[int]]:
+    """Return {city_name: {postcode, ...}} from each <City> u. street sheet.
+
+    Each sheet has columns IRSZ, CíMHELY NEVE, JELLEGE, VÁROSRÉSZ, 1.SZÁM,
+    1.JEL, 2.SZÁM, 2.JEL. We only need the unique IRSZ values per sheet.
+    """
+    print("Loading city sub-postcodes from street sheets", file=sys.stderr)
+    wb = openpyxl.load_workbook(path, read_only=True, data_only=True)
+    out: dict[str, set[int]] = {}
+    for city, sheet_name in _CITY_STREET_SHEETS.items():
+        if sheet_name not in wb.sheetnames:
+            print(f"  WARN: sheet {sheet_name!r} missing", file=sys.stderr)
+            continue
+        ws = wb[sheet_name]
+        pcs: set[int] = set()
+        for i, row in enumerate(ws.iter_rows(values_only=True)):
+            if i == 0:
+                continue  # header
+            if not row or row[0] is None:
+                continue
+            try:
+                pcs.add(int(row[0]))
+            except (TypeError, ValueError):
+                continue
+        out[city] = pcs
+        print(f"  {city}: {len(pcs)} unique sub-postcodes from {sheet_name}", file=sys.stderr)
+    return out
+
+
 def build(out_path: Path) -> None:
     posta = load_posta(POSTA_XLSX)
     irszhnk = load_irszhnk(IRSZHNK_CSV)
     bp = load_bp_districts(POSTA_XLSX)
+    city_subpcs = load_city_subpostcodes(POSTA_XLSX)
 
     # CRITICAL: Posta's Települések sheet excludes Budapest. Derive Budapest
     # entries from the Bp.u. street sheet (deduped per postcode).
@@ -150,6 +192,27 @@ def build(out_path: Path) -> None:
     ]
     print(f"  Synthesizing {len(bp_settlements)} Budapest entries for postcodes table", file=sys.stderr)
     posta.extend(bp_settlements)
+
+    # CRITICAL: Posta's Települések lists the MAIN postcode only for Szeged,
+    # Miskolc, Debrecen, Pécs, Győr — their internal sub-postcodes
+    # (e.g. 6720-6728 for Szeged) live ONLY in the <City> u. street sheets.
+    # Synthesize one row per (city, sub-postcode) that is not already present
+    # in posta, so lookup_postcode and validate_address resolve them.
+    existing_pcs_per_city: dict[str, set[int]] = {}
+    for pc, city, _part in posta:
+        existing_pcs_per_city.setdefault(city, set()).add(pc)
+    synthesized_subpc = 0
+    for city, pcs in city_subpcs.items():
+        already = existing_pcs_per_city.get(city, set())
+        for pc in sorted(pcs):
+            if pc in already:
+                continue
+            posta.append((pc, city, None))
+            synthesized_subpc += 1
+    print(
+        f"  Synthesizing {synthesized_subpc} city sub-postcode entries (Szeged/Miskolc/Debrecen/Pécs/Győr)",
+        file=sys.stderr,
+    )
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
     if out_path.exists():
