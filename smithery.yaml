@@ -11,6 +11,7 @@ metadata:
   tags: [hungary, postcode, validation, address, mcp, utility, magyar-posta]
   license: MIT
   publisher: unbearabledev
+  icon: icon.svg
   homepage: https://github.com/UnbearableDev/hu-postcode-validator
 workflow_prompts:
   - name: lookup_postcode
