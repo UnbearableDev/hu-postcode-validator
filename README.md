@@ -2,7 +2,7 @@
 
 > MCP server that validates Hungarian postcodes and addresses. Powered by the official Magyar Posta catalog and KSH (Hungarian Central Statistics Office) settlement data. **Pennies per call.**
 
-**Built by [Unbearable TechTips](https://github.com/UnbearableDev).** Pay-per-event pricing — only billed when a tool is actually called.
+**Built by [Unbearable Labs](https://github.com/UnbearableDev).** Pay-per-event pricing — only billed when a tool is actually called.
 
 ---
 
