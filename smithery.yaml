@@ -12,3 +12,13 @@ metadata:
   license: MIT
   publisher: unbearabledev
   homepage: https://github.com/UnbearableDev/hu-postcode-validator
+workflow_prompts:
+  - name: lookup_postcode
+    description: Look up the settlement and county for a 4-digit Hungarian postcode. Returns canonical name, county, and region.
+    prompt: What settlement and county does Hungarian postcode 6720 correspond to?
+  - name: lookup_city
+    description: Find all postcodes for a Hungarian city or settlement. Diacritic-insensitive — works with or without Hungarian accents.
+    prompt: What are all the postcodes for Szeged Belvaros? Look up postcodes for the city Szeged.
+  - name: validate_address
+    description: Validate a postcode-city pairing and get a correction suggestion if they do not match in the official dataset.
+    prompt: Is the address 1234 Budapest valid? Validate this Hungarian postcode and city combination.
