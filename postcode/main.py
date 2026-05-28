@@ -71,6 +71,14 @@ LANDING_HTML = """<!doctype html>
 """.encode("utf-8")
 
 
+_ANNOTATIONS = {
+    "readOnlyHint": True,
+    "destructiveHint": False,
+    "idempotentHint": True,
+    "openWorldHint": False,
+}
+
+
 # ── MCP server ─────────────────────────────────────────────────────────────
 
 
@@ -80,25 +88,25 @@ def get_server() -> FastMCP:
 
     # ── Cheap tools — $0.001 each (lookup-call) ──
 
-    @server.tool()
+    @server.tool(annotations=_ANNOTATIONS)
     async def lookup_postcode(postcode: int | str) -> dict[str, Any]:
         """Return settlement(s) and county for a Hungarian postcode."""
         await Actor.charge("lookup-call")
         return await tools.lookup_postcode(postcode)
 
-    @server.tool()
+    @server.tool(annotations=_ANNOTATIONS)
     async def lookup_city(city: str) -> dict[str, Any]:
         """Return all postcodes for a Hungarian city/settlement (diacritic-insensitive)."""
         await Actor.charge("lookup-call")
         return await tools.lookup_city(city)
 
-    @server.tool()
+    @server.tool(annotations=_ANNOTATIONS)
     async def validate_address(postcode: int | str, city: str) -> dict[str, Any]:
         """Validate that postcode and city are a valid Hungarian pairing."""
         await Actor.charge("lookup-call")
         return await tools.validate_address(postcode, city)
 
-    @server.tool()
+    @server.tool(annotations=_ANNOTATIONS)
     async def budapest_district_lookup(district_number: int | str) -> dict[str, Any]:
         """Return Budapest postcodes for a district (1-23 or roman I-XXIII)."""
         await Actor.charge("lookup-call")
@@ -106,7 +114,7 @@ def get_server() -> FastMCP:
 
     # ── Bulk tool — $0.005 (bulk-call) — returns many rows ──
 
-    @server.tool()
+    @server.tool(annotations=_ANNOTATIONS)
     async def list_postcodes_in_county(county_name: str) -> dict[str, Any]:
         """List all postcodes in a given Hungarian county (vármegye)."""
         await Actor.charge("bulk-call")
