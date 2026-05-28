@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- hu-postcode-validator: N5 highlighted (bottom-right), accent #10B981 (emerald) -->
+  <rect width="200" height="200" rx="31" fill="#0F172A"/>
+  <!-- Edges: N2→N5 active cyan, rest inactive -->
+  <line x1="100" y1="100" x2="56" y2="56" stroke="#475569" stroke-width="5" stroke-linecap="round"/>
+  <line x1="100" y1="100" x2="144" y2="63" stroke="#475569" stroke-width="5" stroke-linecap="round"/>
+  <line x1="100" y1="100" x2="69" y2="150" stroke="#475569" stroke-width="5" stroke-linecap="round"/>
+  <line x1="100" y1="100" x2="150" y2="144" stroke="#06B6D4" stroke-width="6" stroke-linecap="round"/>
+  <!-- N1 inactive -->
+  <circle cx="56" cy="56" r="13" fill="#F8FAFC"/>
+  <!-- N2 center inactive -->
+  <circle cx="100" cy="100" r="13" fill="#F8FAFC"/>
+  <!-- N3 inactive -->
+  <circle cx="144" cy="63" r="13" fill="#F8FAFC"/>
+  <!-- N4 inactive -->
+  <circle cx="69" cy="150" r="13" fill="#F8FAFC"/>
+  <!-- N5 highlighted (150,144): r=16, emerald fill, ink inner ring -->
+  <circle cx="150" cy="144" r="16" fill="#10B981"/>
+  <circle cx="150" cy="144" r="7" fill="#0F172A"/>
+  <!-- 4-digit postcode grid: 2×2 cell grid top-left, suggesting Hungarian 4-digit postcodes -->
+  <rect x="30" y="32" width="26" height="16" rx="3" fill="none" stroke="#10B981" stroke-width="3" opacity="0.7"/>
+  <rect x="62" y="32" width="26" height="16" rx="3" fill="none" stroke="#10B981" stroke-width="3" opacity="0.7"/>
+  <rect x="30" y="54" width="26" height="16" rx="3" fill="none" stroke="#10B981" stroke-width="3" opacity="0.5"/>
+  <rect x="62" y="54" width="26" height="16" rx="3" fill="none" stroke="#10B981" stroke-width="3" opacity="0.5"/>
+  <!-- Map pin (teardrop) above the grid -->
+  <circle cx="114" cy="46" r="10" fill="#10B981" opacity="0.8"/>
+  <line x1="114" y1="56" x2="114" y2="70" stroke="#10B981" stroke-width="4" stroke-linecap="round" opacity="0.8"/>
+  <circle cx="114" cy="46" r="4" fill="#0F172A"/>
+</svg>
